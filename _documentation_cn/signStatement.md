@@ -1,0 +1,92 @@
+---
+title: 签名说明
+position_number: 4
+parameters:
+- name:
+content:
+content_markdown: >-
+    由于 Acthubx 需要为第三方平台提供一些开放接口，因此需要考虑**数据安全**问题。
+
+
+    例如：
+
+    - 数据是否被篡改
+
+    - 数据是否已过期
+
+    - 数据能否重复提交
+
+    - 接口的访问频率
+
+
+    其中，**数据是否被篡改是最重要的问题**。
+
+
+    **步骤：**
+
+
+    1. **Appkey & Secretkey** 首先在用户中心申请 `appkey` 和 `secretkey`，每个用户的密钥都不同。
+
+
+    2. **Timestamp** 添加 `timestamp`。
+    其值应为发送请求时的 **unix 时间戳（毫秒）**。
+    数据的时间基于此值计算。
+
+
+    3. **Signature** 添加 `signature`，其值通过签名算法规则获得。
+
+
+    4. **RecvWindow** 添加 `recvwindow`（定义请求的有效时间）。
+    有效时间固定为某个值。
+    当收到请求时，服务器会检查：serverTime - timestamp < recvwindow。
+    任何超过 **5000 毫秒**的请求都无效。
+    如果客户端的时间戳比服务器时间提前超过 **1 秒**，请求无效。
+    **注意：** 网络条件并非总是 100% 可靠。这就是我们提供 `recvWindow` 参数的原因。
+    对于高频交易，调整 `recvWindow` 以满足时效性需求。
+    **不建议**使用超过 **5 秒**的 RecvWindow。
+
+
+    5. **Algorithm** 添加 `algorithms`（签名方法）。
+    推荐：`HmacSHA256`。
+    支持的算法：HmacMD5、HmacSHA1、HmacSHA224、**HmacSHA256（推荐）**、HmacSHA384、HmacSHA512
+examples:
+  -
+    name: validate-appkey
+    mandatory: true
+    example: dbefbc809e3e83c283a984c3a1459732ea7db1360ca80c5c2c8867408d28cc83
+    description:
+  -
+    name: validate-timestamp
+    mandatory: true
+    example: 1641446237201
+    description:
+  -
+    name: validate-signature
+    mandatory: true
+    example: 0a7d0b5e802eb5e52ac0cfcd6311b0faba6e2503a9a8d1e2364b38617877574d
+    description:
+  -
+    name: validate-recvwindow
+    mandatory: true
+    example: 5000（毫秒）
+    description:
+  -
+    name: validate-algorithms
+    mandatory: true
+    example: HmacSHA256
+    description: HmacMD5、HmacSHA1、HmacSHA224、HmacSHA256、HmacSHA384、HmacSHA512，默认：HmacSHA256
+  -
+    name: validate-signversion
+    mandatory: false
+    example: 1.0
+    description: 保留字段，签名版本号
+
+left_code_blocks:
+- code_block:
+  title:
+  language:
+right_code_blocks:
+- code_block:
+  title:
+  language:
+---
